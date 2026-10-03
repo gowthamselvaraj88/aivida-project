@@ -1,0 +1,1527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIvida Telehealth Platform — Interactive Presentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand: #00b074;
+      --brand-hover: #009963;
+      --brand-dark: #004d33;
+      --brand-light: #e8f8f1;
+      --ink: #0f172a;
+      --ink-secondary: #334155;
+      --muted: #64748b;
+      --canvas: #f4f9f6;
+      --card-bg: #ffffff;
+      --border: #e2ece6;
+      --amber: #f59e0b;
+      --blue: #2563eb;
+      --shadow: 0 10px 30px -10px rgba(0, 176, 116, 0.12), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 20px 40px -15px rgba(0, 0, 0, 0.1);
+      --font-display: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--canvas);
+      color: var(--ink);
+      min-height: 100vh;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top presentation control bar */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      z-index: 1000;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .clover-mark {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2.5px;
+      width: 22px;
+      height: 22px;
+    }
+    .clover-leaf {
+      background: var(--brand);
+      border-radius: 4px;
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.25rem;
+      color: var(--ink);
+    }
+    .brand-tag {
+      background: var(--brand-light);
+      color: var(--brand);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      letter-spacing: 0.04em;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--ink-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.45rem 0.9rem;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .nav-btn:hover:not(:disabled) {
+      border-color: var(--brand);
+      color: var(--brand);
+      transform: translateY(-1px);
+    }
+    .nav-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .nav-btn.primary {
+      background: var(--brand);
+      color: #ffffff;
+      border-color: var(--brand);
+    }
+    .nav-btn.primary:hover {
+      background: var(--brand-hover);
+    }
+
+    .slide-counter {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--muted);
+      min-width: 70px;
+      text-align: center;
+    }
+
+    /* Deck Container */
+    .deck-container {
+      margin-top: 60px;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .slide-viewport {
+      width: 100%;
+      max-width: 1280px;
+      min-height: calc(100vh - 120px);
+      background: var(--card-bg);
+      border-radius: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .slide {
+      display: none;
+      flex: 1;
+      padding: 3rem;
+      flex-direction: column;
+      animation: fadeInSlide 0.3s ease-out;
+    }
+    .slide.active {
+      display: flex;
+    }
+
+    @keyframes fadeInSlide {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Slide Header */
+    .slide-eyebrow {
+      font-family: var(--font-display);
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: var(--brand);
+      margin-bottom: 0.4rem;
+    }
+    .slide-title {
+      font-family: var(--font-display);
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.6rem;
+    }
+    .slide-desc {
+      font-size: 1.05rem;
+      color: var(--muted);
+      line-height: 1.5;
+      max-width: 900px;
+      margin-bottom: 2rem;
+    }
+
+    /* Cover Slide */
+    .cover-slide {
+      background: linear-gradient(135deg, #004d33 0%, #00774f 60%, #00b074 100%);
+      color: #ffffff;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+    .cover-slide::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 30%, rgba(255,255,255,0.12) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(0,0,0,0.15) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .cover-inner {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+    }
+    .cover-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(8px);
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #a7f3d0;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .cover-title {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.2rem;
+    }
+    .cover-subtitle {
+      font-size: 1.3rem;
+      color: #d1fae5;
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+    }
+    .cover-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+    .cover-pill {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    /* 3-Column Pillar Cards (Slide 2) */
+    .pillar-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      flex: 1;
+    }
+    .pillar-card {
+      background: #fafdfc;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .pillar-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--brand);
+      box-shadow: var(--shadow);
+    }
+    .pillar-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+    .pillar-card.c1::before { background: var(--brand); }
+    .pillar-card.c2::before { background: var(--blue); }
+    .pillar-card.c3::before { background: var(--amber); }
+
+    .pillar-num {
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.75rem;
+    }
+    .pillar-card.c1 .pillar-num { color: var(--brand); }
+    .pillar-card.c2 .pillar-num { color: var(--blue); }
+    .pillar-card.c3 .pillar-num { color: var(--amber); }
+
+    .pillar-title {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.75rem;
+      line-height: 1.25;
+    }
+    .pillar-body {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 1.5rem;
+      flex: 1;
+    }
+    .pillar-benefit {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.9rem;
+      font-size: 0.85rem;
+      color: var(--ink-secondary);
+      line-height: 1.4;
+    }
+    .pillar-benefit strong {
+      display: block;
+      color: var(--brand-dark);
+      margin-bottom: 0.2rem;
+    }
+
+    /* Split Showcase (Slides 3 & 4) */
+    .split-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.35fr;
+      gap: 2.2rem;
+      flex: 1;
+      align-items: center;
+    }
+    .split-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+    .feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      background: #fafdfc;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0.85rem 1rem;
+      transition: all 0.2s ease;
+    }
+    .feature-item:hover {
+      border-color: var(--brand);
+      background: #ffffff;
+    }
+    .feature-icon-box {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--brand-light);
+      color: var(--brand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+    .feature-content h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.2rem;
+    }
+    .feature-content p {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .screenshot-frame {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 0.5rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .screenshot-img {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      display: block;
+      border: 1px solid #eef3f0;
+      cursor: zoom-in;
+      transition: transform 0.2s ease;
+    }
+    .screenshot-img:hover {
+      transform: scale(1.015);
+    }
+    .screenshot-caption {
+      margin-top: 0.6rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      font-weight: 600;
+    }
+
+    /* Happy Path Step Timeline (Slide 5) */
+    .happy-timeline {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.1rem;
+      flex: 1;
+    }
+    .step-card {
+      background: #fafdfc;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.4rem 1.1rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    .step-card:hover {
+      border-color: var(--brand);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+    .step-badge {
+      display: inline-block;
+      align-self: flex-start;
+      background: var(--brand);
+      color: #ffffff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      margin-bottom: 0.8rem;
+    }
+    .step-card.s2 .step-badge { background: var(--blue); }
+    .step-card.s3 .step-badge { background: var(--amber); }
+    .step-card.s4 .step-badge { background: var(--brand-dark); }
+    .step-card.s5 .step-badge { background: var(--brand); }
+
+    .step-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+      line-height: 1.25;
+    }
+    .step-desc {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 1rem;
+      flex: 1;
+    }
+    .step-app-pill {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.4rem 0.6rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--ink-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .step-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--brand);
+    }
+
+    /* ========================================================= */
+    /* ANIMATED WORKING BLOCK DIAGRAM (Slide 6)                  */
+    /* ========================================================= */
+    .diagram-slide {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .diagram-controls-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      background: #f8fbf9;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.4rem 0.6rem;
+      margin-bottom: 1.2rem;
+      width: fit-content;
+    }
+    .flow-btn {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--ink-secondary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 0.4rem 0.9rem;
+      border-radius: 999px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: all 0.2s ease;
+    }
+    .flow-btn:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+    }
+    .flow-btn.active {
+      background: var(--brand);
+      color: #ffffff;
+      border-color: var(--brand);
+    }
+
+    .diagram-canvas-wrap {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      position: relative;
+      box-shadow: var(--shadow);
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .diagram-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr 1fr;
+      gap: 2rem;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .diagram-node {
+      background: #fafdfc;
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+      transition: all 0.3s ease;
+    }
+    .diagram-node.active-node {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px rgba(0, 176, 116, 0.15);
+      background: #ffffff;
+    }
+    .diagram-node-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #edf4f0;
+      padding-bottom: 0.5rem;
+    }
+    .diagram-node-title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+    .node-url-tag {
+      font-family: monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: #eef7f2;
+      color: var(--brand-dark);
+      padding: 0.15rem 0.45rem;
+      border-radius: 6px;
+    }
+    .node-points {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 0.4rem;
+    }
+    .node-points li {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .node-points li::before {
+      content: '•';
+      color: var(--brand);
+      font-size: 1.2rem;
+      line-height: 0;
+    }
+
+    /* Middle Core Stack */
+    .middle-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+    }
+
+    /* SVG Connecting Lines */
+    .connections-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Animated pulse dot along path */
+    .pulse-packet {
+      fill: var(--brand);
+      filter: drop-shadow(0 0 6px rgba(0, 176, 116, 0.8));
+    }
+    .pulse-packet.amber {
+      fill: var(--amber);
+      filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.8));
+    }
+    .pulse-packet.blue {
+      fill: var(--blue);
+      filter: drop-shadow(0 0 6px rgba(37, 99, 235, 0.8));
+    }
+
+    /* Layman explanation ticker below diagram */
+    .diagram-ticker {
+      margin-top: 1rem;
+      background: #f8fcf9;
+      border: 1px solid #ddead3;
+      border-radius: 12px;
+      padding: 0.9rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+    .ticker-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--brand);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+      animation: pulseAttention 2s infinite ease-in-out;
+    }
+    @keyframes pulseAttention {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); box-shadow: 0 0 10px rgba(0, 176, 116, 0.4); }
+    }
+    .ticker-text {
+      font-size: 0.88rem;
+      color: var(--ink);
+      line-height: 1.4;
+    }
+    .ticker-text strong {
+      color: var(--brand-dark);
+    }
+
+    /* Slide 7: Double Showcase (Prescription & Schedule) */
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.8rem;
+      flex: 1;
+    }
+
+    /* Slide 8: Final Summary Matrix */
+    .matrix-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      flex: 1;
+    }
+    .matrix-card {
+      background: #fafdfc;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .matrix-card.m1 { border-top: 5px solid var(--blue); }
+    .matrix-card.m2 { border-top: 5px solid var(--brand); }
+    .matrix-card.m3 { border-top: 5px solid var(--amber); }
+
+    .matrix-title {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 1.2rem;
+    }
+    .matrix-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+    .matrix-list li {
+      font-size: 0.92rem;
+      color: var(--ink-secondary);
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      line-height: 1.45;
+    }
+    .matrix-list li span.check {
+      color: var(--brand);
+      font-weight: 800;
+      font-size: 1.1rem;
+      line-height: 1;
+    }
+
+    /* Modal for Full Image Zoom */
+    .img-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .img-modal.open {
+      display: flex;
+    }
+    .img-modal-content {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+    .modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 2rem;
+      color: #ffffff;
+      font-size: 2rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    /* Bottom footer indicators */
+    .deck-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 3rem 1.5rem;
+      border-top: 1px solid var(--border);
+      background: #ffffff;
+    }
+    .footer-left {
+      font-size: 0.8rem;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .footer-dots {
+      display: flex;
+      gap: 0.4rem;
+    }
+    .footer-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .footer-dot.active {
+      width: 24px;
+      background: var(--brand);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .split-layout, .showcase-grid, .pillar-grid, .happy-timeline, .matrix-grid {
+        grid-template-columns: 1fr;
+      }
+      .slide {
+        padding: 1.5rem;
+      }
+      .diagram-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Sticky Navigation Bar -->
+  <header class="top-bar">
+    <div class="brand-group">
+      <div class="clover-mark" aria-hidden="true">
+        <div class="clover-leaf"></div>
+        <div class="clover-leaf" style="opacity:0.85;"></div>
+        <div class="clover-leaf" style="opacity:0.9;"></div>
+        <div class="clover-leaf"></div>
+      </div>
+      <span class="brand-title">AIvida</span>
+      <span class="brand-tag">EXECUTIVE SLIDE DECK</span>
+    </div>
+
+    <div class="top-controls">
+      <button class="nav-btn" id="prevBtn" onclick="prevSlide()">← Previous</button>
+      <span class="slide-counter" id="slideCounter">Slide 1 / 8</span>
+      <button class="nav-btn primary" id="nextBtn" onclick="nextSlide()">Next →</button>
+      <a class="nav-btn" href="AIvida_Telehealth_Presentation.pptx" download style="text-decoration:none;">⬇ Download PPTX</a>
+      <button class="nav-btn" onclick="toggleFullScreen()" title="Full Screen Mode">⛶ Fullscreen</button>
+    </div>
+  </header>
+
+  <!-- Slide Viewport -->
+  <main class="deck-container">
+    <div class="slide-viewport">
+
+      <!-- ============================================== -->
+      <!-- SLIDE 1: Cover Slide                           -->
+      <!-- ============================================== -->
+      <section class="slide cover-slide active" id="slide-1">
+        <div class="cover-inner">
+          <div class="cover-badge">
+            <span style="font-size:1.1rem;">🌿</span>
+            <span>AIVIDA HEALTHCARE INNOVATION</span>
+          </div>
+          <h1 class="cover-title">Telehealth Simplified<br>for Everyone</h1>
+          <p class="cover-subtitle">
+            A plain-language guide to how patients, doctors, and modern clinical technology work together without paperwork, travel, or waiting rooms.
+          </p>
+          <div class="cover-pills">
+            <div class="cover-pill">📱 Patient Care Portal</div>
+            <div class="cover-pill">🩺 Doctor Clinical Cockpit</div>
+            <div class="cover-pill">⚡ 5-Step Happy Path</div>
+            <div class="cover-pill">🔄 Live Working Block Diagram</div>
+          </div>
+          <div style="margin-top:2.5rem;">
+            <button class="nav-btn primary" style="padding:0.75rem 1.8rem; font-size:1rem;" onclick="nextSlide()">
+              Start Guided Tour →
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SLIDE 2: The Big Picture (Layman Overview)     -->
+      <!-- ============================================== -->
+      <section class="slide" id="slide-2">
+        <div class="slide-eyebrow">The Layman Overview</div>
+        <h2 class="slide-title">The Big Picture: What is AIvida?</h2>
+        <p class="slide-desc">
+          Visiting a doctor in person often means fighting traffic, sitting in crowded waiting rooms, and losing paper prescriptions. AIvida re-imagines this experience into three clean pillars.
+        </p>
+
+        <div class="pillar-grid">
+          <div class="pillar-card c1">
+            <div class="pillar-num">PILLAR 01</div>
+            <h3 class="pillar-title">Zero Waiting Rooms</h3>
+            <p class="pillar-body">
+              Patients search certified specialists by department, pick an open slot that fits their daily schedule, and connect face-to-face via secure video in seconds.
+            </p>
+            <div class="pillar-benefit">
+              <strong>Layman Benefit:</strong>
+              No sick bays, no transit time. Receive professional medical care from your bed or couch.
+            </div>
+          </div>
+
+          <div class="pillar-card c2">
+            <div class="pillar-num">PILLAR 02</div>
+            <h3 class="pillar-title">Doctor's Clinical Cockpit</h3>
+            <p class="pillar-body">
+              Instead of rummaging through paper folders, physicians get an organized digital workspace with live appointment queues, patient vitals, and 1-click video consultations.
+            </p>
+            <div class="pillar-benefit">
+              <strong>Layman Benefit:</strong>
+              Physicians spend more time listening to patients and less time doing administrative data entry.
+            </div>
+          </div>
+
+          <div class="pillar-card c3">
+            <div class="pillar-num">PILLAR 03</div>
+            <h3 class="pillar-title">Never Lose a Prescription</h3>
+            <p class="pillar-body">
+              Doctors write digital prescriptions with accurate dosages and instructions. Once signed, they appear instantly in the patient's phone and are saved permanently.
+            </p>
+            <div class="pillar-benefit">
+              <strong>Layman Benefit:</strong>
+              No illegible doctor handwriting. Easy for patients and local pharmacists to read clearly.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SLIDE 3: Patient Care Portal Deep Dive         -->
+      <!-- ============================================== -->
+      <section class="slide" id="slide-3">
+        <div class="slide-eyebrow">Portal 1: Patient Experience</div>
+        <h2 class="slide-title">The Patient Care Portal</h2>
+        <p class="slide-desc">
+          Hosted at <code style="color:var(--brand); font-weight:700;">localhost:3001</code>, this portal gives patients complete autonomy over their healthcare journey in a clean, friendly interface.
+        </p>
+
+        <div class="split-layout">
+          <div class="split-info">
+            <div class="feature-list">
+              <div class="feature-item">
+                <div class="feature-icon-box">🔍</div>
+                <div class="feature-content">
+                  <h4>Find the Best Doctor</h4>
+                  <p>Browse by specialty (Cardiology, Dermatology, General Practice) with ratings, availability, and qualifications.</p>
+                </div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-icon-box">📅</div>
+                <div class="feature-content">
+                  <h4>1-Click Appointment Booking</h4>
+                  <p>Pick convenient morning, afternoon, or evening slots with instant automated calendar confirmation.</p>
+                </div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-icon-box">🎥</div>
+                <div class="feature-content">
+                  <h4>No Downloads Required</h4>
+                  <p>Join the encrypted consultation directly inside your standard web browser with zero plugins or app downloads.</p>
+                </div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-icon-box">📋</div>
+                <div class="feature-content">
+                  <h4>Permanent Health History</h4>
+                  <p>Access your past visits, active prescriptions, and physician notes whenever you need them.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="screenshot-frame">
+            <img class="screenshot-img" src="screenshots/patient_doctors.png" alt="Patient Portal Find Doctor View" onclick="openModal(this.src)">
+            <div class="screenshot-caption">Live Screen: Patient searches specialist and selects appointment slot (click to expand)</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SLIDE 4: Doctor Clinical Portal Deep Dive      -->
+      <!-- ============================================== -->
+      <section class="slide" id="slide-4">
+        <div class="slide-eyebrow">Portal 2: Clinical Workspace</div>
+        <h2 class="slide-title">The Doctor Clinical Portal</h2>
+        <p class="slide-desc">
+          Hosted at <code style="color:var(--brand); font-weight:700;">localhost:3000</code>, this is the doctor's command center—streamlining patient queues, telemetry, and clinical documentation.
+        </p>
+
+        <div class="split-layout">
+          <div class="split-info">
+            <div class="feature-list">
+              <div class="feature-item">
+                <div class="feature-icon-box">🟢</div>
+                <div class="feature-content">
+                  <h4>Practice Availability Toggle</h4>
+                  <p>One-touch "Active & Online" button lets doctors pause or resume taking appointments instantly in real time.</p>
+                </div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-icon-box">📊</div>
+                <div class="feature-content">
+                  <h4>Clinical Telemetry & Metrics</h4>
+                  <p>Live tiles track today's appointments, completed visits, pending consultations, and diagnostic progress.</p>
+                </div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-icon-box">⏱️</div>
+                <div class="feature-content">
+                  <h4>Consultation Schedule</h4>
+                  <p>Visual queue of patients with time slots, consultation types, and instant "Start Video Call" action buttons.</p>
+                </div>
+              </div>
+
+              <div class="feature-item">
+                <div class="feature-icon-box">💊</div>
+                <div class="feature-content">
+                  <h4>Digital E-Prescription Generator</h4>
+                  <p>Quickly prescribe medications with pre-filled dosages, frequency chips, and patient diet instructions.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="screenshot-frame">
+            <img class="screenshot-img" src="screenshots/doctor_dashboard.png" alt="Doctor Portal Clinical Workspace View" onclick="openModal(this.src)">
+            <div class="screenshot-caption">Live Screen: Doctor workspace with telemetry cards, queue, and availability toggle</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SLIDE 5: The Happy Path Flow (Step-by-Step)   -->
+      <!-- ============================================== -->
+      <section class="slide" id="slide-5">
+        <div class="slide-eyebrow">End-to-End User Experience</div>
+        <h2 class="slide-title">The Happy Path: From Symptoms to Recovery</h2>
+        <p class="slide-desc">
+          Here is the step-by-step journey of a real patient using AIvida. Total elapsed time: under 15 minutes!
+        </p>
+
+        <div class="happy-timeline">
+          <div class="step-card s1">
+            <div class="step-badge">STEP 1</div>
+            <h3 class="step-title">Search Doctor</h3>
+            <p class="step-desc">
+              Patient feels unwell, opens Patient Portal, selects General Medicine, and reviews available doctors.
+            </p>
+            <div class="step-app-pill">
+              <span class="step-dot" style="background:var(--brand);"></span>
+              <span>Patient Portal</span>
+            </div>
+          </div>
+
+          <div class="step-card s2">
+            <div class="step-badge">STEP 2</div>
+            <h3 class="step-title">Book Slot</h3>
+            <p class="step-desc">
+              Picks an upcoming 10:00 AM slot. The system locks the slot and confirms the appointment in under 1 second.
+            </p>
+            <div class="step-app-pill">
+              <span class="step-dot" style="background:var(--blue);"></span>
+              <span>Core Server & DB</span>
+            </div>
+          </div>
+
+          <div class="step-card s3">
+            <div class="step-badge">STEP 3</div>
+            <h3 class="step-title">Join Video Room</h3>
+            <p class="step-desc">
+              At 10:00 AM, both doctor and patient click "Join Consultation". Encrypted HD video connects in the browser.
+            </p>
+            <div class="step-app-pill">
+              <span class="step-dot" style="background:var(--amber);"></span>
+              <span>WebRTC Engine</span>
+            </div>
+          </div>
+
+          <div class="step-card s4">
+            <div class="step-badge">STEP 4</div>
+            <h3 class="step-title">Examine & Counsel</h3>
+            <p class="step-desc">
+              Doctor reviews patient telemetry, discusses symptoms, checks vitals, and formulates the treatment plan.
+            </p>
+            <div class="step-app-pill">
+              <span class="step-dot" style="background:var(--brand-dark);"></span>
+              <span>Doctor Portal</span>
+            </div>
+          </div>
+
+          <div class="step-card s5">
+            <div class="step-badge">STEP 5</div>
+            <h3 class="step-title">E-Prescription</h3>
+            <p class="step-desc">
+              Doctor signs the digital Rx. Medicine, dosage, and schedule appear on the patient's screen immediately.
+            </p>
+            <div class="step-app-pill">
+              <span class="step-dot" style="background:var(--brand);"></span>
+              <span>Both Portals Sync</span>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:1.5rem; text-align:center;">
+          <button class="nav-btn primary" onclick="goToSlide(6)">
+            See How Information Flows Under the Hood (Animated Diagram) →
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SLIDE 6: Working Block Diagram (ANIMATED)      -->
+      <!-- ============================================== -->
+      <section class="slide diagram-slide" id="slide-6">
+        <div class="slide-eyebrow">Interactive Architectural Animation</div>
+        <h2 class="slide-title">Working Block Diagram: Animated Flow</h2>
+        <p class="slide-desc">
+          Click the interactive buttons below to trigger simulated data flows and watch packets travel between the patient, cloud server, and doctor in real time.
+        </p>
+
+        <!-- Interactive Simulation Buttons -->
+        <div class="diagram-controls-bar">
+          <span style="font-size:0.8rem; font-weight:700; color:var(--muted); margin-right:0.3rem;">Simulate Action:</span>
+          <button class="flow-btn active" id="btn-flow-idle" onclick="setFlowMode('idle')">🔄 Continuous Pulse</button>
+          <button class="flow-btn" id="btn-flow-book" onclick="setFlowMode('book')">📅 1. Booking Request</button>
+          <button class="flow-btn" id="btn-flow-video" onclick="setFlowMode('video')">🎥 2. Live Video Call</button>
+          <button class="flow-btn" id="btn-flow-rx" onclick="setFlowMode('rx')">💊 3. E-Prescription Dispatch</button>
+        </div>
+
+        <div class="diagram-canvas-wrap">
+          <!-- Animated SVG Overlay -->
+          <svg class="connections-svg" id="diagramSvg" viewBox="0 0 1000 340" preserveAspectRatio="none">
+            <!-- Path A: Patient <-> Core Server -->
+            <path id="path-patient-server" d="M 240,100 L 400,100" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6,6" fill="none" />
+            <!-- Path B: Core Server <-> Doctor -->
+            <path id="path-server-doctor" d="M 600,100 L 760,100" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6,6" fill="none" />
+            <!-- Path C: Patient <-> WebRTC Media -->
+            <path id="path-patient-webrtc" d="M 240,240 L 400,240" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6,6" fill="none" />
+            <!-- Path D: WebRTC <-> Doctor -->
+            <path id="path-webrtc-doctor" d="M 600,240 L 760,240" stroke="#cbd5e1" stroke-width="3" stroke-dasharray="6,6" fill="none" />
+            <!-- Vertical Sync between Server and WebRTC -->
+            <path id="path-server-webrtc" d="M 500,150 L 500,190" stroke="#e2ece6" stroke-width="2" stroke-dasharray="4,4" fill="none" />
+
+            <!-- Animated Particles (Managed by JS) -->
+            <circle id="particle-book" class="pulse-packet" r="7" cx="240" cy="100" style="display:none;" />
+            <circle id="particle-video-1" class="pulse-packet amber" r="7" cx="240" cy="240" style="display:none;" />
+            <circle id="particle-video-2" class="pulse-packet amber" r="7" cx="760" cy="240" style="display:none;" />
+            <circle id="particle-rx" class="pulse-packet blue" r="7" cx="760" cy="100" style="display:none;" />
+          </svg>
+
+          <!-- 3 Columns of Blocks -->
+          <div class="diagram-grid">
+            <!-- Left: Patient Portal -->
+            <div class="diagram-node" id="node-patient">
+              <div class="diagram-node-header">
+                <span class="diagram-node-title">Patient Portal</span>
+                <span class="node-url-tag">:3001</span>
+              </div>
+              <p style="font-size:0.75rem; color:var(--brand); font-weight:700;">USER INTERFACE (BROWSER/MOBILE)</p>
+              <ul class="node-points">
+                <li>Doctor Discovery & Search</li>
+                <li>Live Slot Reservation</li>
+                <li>One-Click Video Entrance</li>
+                <li>Digital Prescription Viewer</li>
+              </ul>
+            </div>
+
+            <!-- Middle: Server & WebRTC -->
+            <div class="middle-stack">
+              <div class="diagram-node" id="node-server" style="background:#f4fbf7; border-color:#c8e8d8;">
+                <div class="diagram-node-header">
+                  <span class="diagram-node-title">AIvida Core Server</span>
+                  <span class="node-url-tag">:8080 (Go)</span>
+                </div>
+                <p style="font-size:0.75rem; color:var(--brand-dark); font-weight:700;">LOGIC & PERSISTENCE</p>
+                <ul class="node-points">
+                  <li>REST API & Slot Management</li>
+                  <li>SQLite / SQL Database</li>
+                  <li>Instant State Synchronization</li>
+                </ul>
+              </div>
+
+              <div class="diagram-node" id="node-webrtc" style="background:#fffdf6; border-color:#fae8c8;">
+                <div class="diagram-node-header">
+                  <span class="diagram-node-title">WebRTC Media Engine</span>
+                  <span class="node-url-tag" style="background:#fef3c7; color:#92400e;">P2P Media</span>
+                </div>
+                <p style="font-size:0.75rem; color:var(--amber); font-weight:700;">ENCRYPTED AUDIO/VIDEO PIPELINE</p>
+                <ul class="node-points">
+                  <li>Sub-second Low Latency</li>
+                  <li>End-to-End Encryption</li>
+                  <li>In-Session Interactive Chat</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Right: Doctor Portal -->
+            <div class="diagram-node" id="node-doctor">
+              <div class="diagram-node-header">
+                <span class="diagram-node-title">Doctor Portal</span>
+                <span class="node-url-tag">:3000</span>
+              </div>
+              <p style="font-size:0.75rem; color:var(--brand); font-weight:700;">CLINICAL WORKSPACE</p>
+              <ul class="node-points">
+                <li>Practice Online/Offline Switch</li>
+                <li>Live Consultation Schedule</li>
+                <li>Clinical Telemetry & Vitals</li>
+                <li>E-Prescription Authoring</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- Layman Explanation Box below the diagram -->
+          <div class="diagram-ticker">
+            <div class="ticker-icon" id="tickerIcon">i</div>
+            <div class="ticker-text" id="tickerText">
+              <strong>Layman Explanation:</strong> In continuous mode, the Patient and Doctor portals maintain a secure heartbeat with the Core Server, keeping appointment schedules and doctor availability synchronized in real time.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SLIDE 7: Live UI Showcase (Prescriptions & Slots) -->
+      <!-- ============================================== -->
+      <section class="slide" id="slide-7">
+        <div class="slide-eyebrow">Real Screens in Action</div>
+        <h2 class="slide-title">Inside the Live System</h2>
+        <p class="slide-desc">
+          Live captures from the running AIvida application, demonstrating clear medical hierarchy and responsive component arrangement.
+        </p>
+
+        <div class="showcase-grid">
+          <div class="screenshot-frame">
+            <img class="screenshot-img" src="screenshots/doctor_prescriptions.png" alt="Digital Prescriptions Screen" onclick="openModal(this.src)">
+            <div class="screenshot-caption">Doctor Portal: Digital Prescriptions with separated medication name, dosage chips, and patient diet rules</div>
+          </div>
+
+          <div class="screenshot-frame">
+            <img class="screenshot-img" src="screenshots/doctor_appointments.png" alt="Doctor Appointments Screen" onclick="openModal(this.src)">
+            <div class="screenshot-caption">Doctor Portal: Practice Availability toggle, consultation slots, and direct patient join buttons</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- SLIDE 8: Summary & Layman Benefits Matrix      -->
+      <!-- ============================================== -->
+      <section class="slide" id="slide-8">
+        <div class="slide-eyebrow">Summary & Takeaways</div>
+        <h2 class="slide-title">Why AIvida Wins for Everyone</h2>
+        <p class="slide-desc">
+          AIvida creates a win-win-win ecosystem for patients, healthcare workers, and healthcare practice operators.
+        </p>
+
+        <div class="matrix-grid">
+          <div class="matrix-card m1">
+            <h3 class="matrix-title">For Patients</h3>
+            <ul class="matrix-list">
+              <li><span class="check">✓</span> <span>Care delivered directly to your home</span></li>
+              <li><span class="check">✓</span> <span>No traffic, parking fees, or crowded lobbies</span></li>
+              <li><span class="check">✓</span> <span>Clear, typed electronic prescriptions</span></li>
+              <li><span class="check">✓</span> <span>Full privacy with encrypted video calls</span></li>
+            </ul>
+          </div>
+
+          <div class="matrix-card m2">
+            <h3 class="matrix-title">For Doctors</h3>
+            <ul class="matrix-list">
+              <li><span class="check">✓</span> <span>Single-screen clinical cockpit</span></li>
+              <li><span class="check">✓</span> <span>Toggle online availability anytime</span></li>
+              <li><span class="check">✓</span> <span>1-click video consultations</span></li>
+              <li><span class="check">✓</span> <span>90% less administrative paperwork</span></li>
+            </ul>
+          </div>
+
+          <div class="matrix-card m3">
+            <h3 class="matrix-title">For Clinics</h3>
+            <ul class="matrix-list">
+              <li><span class="check">✓</span> <span>Modern web standards (zero app install friction)</span></li>
+              <li><span class="check">✓</span> <span>Instant automated appointment scheduling</span></li>
+              <li><span class="check">✓</span> <span>High patient satisfaction and repeat visits</span></li>
+              <li><span class="check">✓</span> <span>Scalable, resilient cloud architecture</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top:1.5rem; text-align:center;">
+          <a class="nav-btn primary" href="AIvida_Telehealth_Presentation.pptx" download style="text-decoration:none; padding:0.6rem 1.6rem; font-size:0.95rem;">
+            📥 Download PowerPoint File (.pptx)
+          </a>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Deck Footer with Progress Dots -->
+  <footer class="deck-footer">
+    <div class="footer-left">
+      AIvida Telehealth Presentation &copy; 2026 &middot; Use ← / → keys or buttons to navigate
+    </div>
+    <div class="footer-dots" id="footerDots">
+      <!-- Dots populated by JavaScript -->
+    </div>
+  </footer>
+
+  <!-- Modal for Expanding Screenshots -->
+  <div class="img-modal" id="imgModal" onclick="closeModal()">
+    <button class="modal-close" onclick="closeModal()">&times;</button>
+    <img class="img-modal-content" id="modalImg" src="" alt="Expanded Screenshot">
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 8;
+    let flowAnimationInterval = null;
+
+    function updateSlide() {
+      // Hide all slides
+      document.querySelectorAll('.slide').forEach((s, idx) => {
+        s.classList.toggle('active', idx + 1 === currentSlide);
+      });
+
+      // Update counter
+      document.getElementById('slideCounter').textContent = `Slide ${currentSlide} / ${totalSlides}`;
+
+      // Update buttons
+      document.getElementById('prevBtn').disabled = (currentSlide === 1);
+      document.getElementById('nextBtn').disabled = (currentSlide === totalSlides);
+
+      // Update dots
+      document.querySelectorAll('.footer-dot').forEach((dot, idx) => {
+        dot.classList.toggle('active', idx + 1 === currentSlide);
+      });
+
+      // Start/stop diagram animations
+      if (currentSlide === 6) {
+        startFlowAnimation();
+      } else {
+        stopFlowAnimation();
+      }
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) {
+        currentSlide++;
+        updateSlide();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) {
+        currentSlide--;
+        updateSlide();
+      }
+    }
+
+    function goToSlide(n) {
+      if (n >= 1 && n <= totalSlides) {
+        currentSlide = n;
+        updateSlide();
+      }
+    }
+
+    // Keyboard Navigation
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key === 'Escape') {
+        closeModal();
+      } else if (e.key === 'f' || e.key === 'F') {
+        toggleFullScreen();
+      }
+    });
+
+    // Populate dots
+    const dotsContainer = document.getElementById('footerDots');
+    for (let i = 1; i <= totalSlides; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'footer-dot' + (i === 1 ? ' active' : '');
+      dot.onclick = () => goToSlide(i);
+      dotsContainer.appendChild(dot);
+    }
+
+    // Fullscreen toggle
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {});
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    // Modal Image Zoom
+    function openModal(src) {
+      document.getElementById('modalImg').src = src;
+      document.getElementById('imgModal').classList.add('open');
+    }
+    function closeModal() {
+      document.getElementById('imgModal').classList.remove('open');
+    }
+
+    // ==============================================
+    // ANIMATED BLOCK DIAGRAM LOGIC
+    // ==============================================
+    let activeMode = 'idle';
+    let animProgress = 0;
+
+    function setFlowMode(mode) {
+      activeMode = mode;
+      document.querySelectorAll('.flow-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.getElementById('btn-flow-' + mode);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const ticker = document.getElementById('tickerText');
+      const icon = document.getElementById('tickerIcon');
+
+      // Reset node highlights
+      document.querySelectorAll('.diagram-node').forEach(n => n.classList.remove('active-node'));
+
+      if (mode === 'idle') {
+        icon.textContent = '🔄';
+        ticker.innerHTML = '<strong>Layman Explanation:</strong> In continuous mode, the Patient and Doctor portals maintain a secure heartbeat with the Core Server, keeping appointment schedules and doctor availability synchronized in real time.';
+      } else if (mode === 'book') {
+        icon.textContent = '📅';
+        document.getElementById('node-patient').classList.add('active-node');
+        document.getElementById('node-server').classList.add('active-node');
+        document.getElementById('node-doctor').classList.add('active-node');
+        ticker.innerHTML = '<strong>Flow 1: Booking Appointment:</strong> Patient clicks "Book Slot". A green request travels to the Core Server, which reserves the slot in the database and pushes an alert to the Doctor\'s schedule.';
+      } else if (mode === 'video') {
+        icon.textContent = '🎥';
+        document.getElementById('node-patient').classList.add('active-node');
+        document.getElementById('node-webrtc').classList.add('active-node');
+        document.getElementById('node-doctor').classList.add('active-node');
+        ticker.innerHTML = '<strong>Flow 2: Live Video Call:</strong> Both participants launch the video consultation. Amber media packets stream in both directions via the WebRTC Engine with low latency and end-to-end encryption.';
+      } else if (mode === 'rx') {
+        icon.textContent = '💊';
+        document.getElementById('node-doctor').classList.add('active-node');
+        document.getElementById('node-server').classList.add('active-node');
+        document.getElementById('node-patient').classList.add('active-node');
+        ticker.innerHTML = '<strong>Flow 3: E-Prescription Dispatch:</strong> Doctor reviews treatment, selects medicines, and clicks "Issue Rx". The signed prescription is saved in the database and immediately populates the Patient\'s screen.';
+      }
+    }
+
+    function startFlowAnimation() {
+      if (flowAnimationInterval) return;
+      flowAnimationInterval = setInterval(renderAnimationStep, 30);
+    }
+
+    function stopFlowAnimation() {
+      if (flowAnimationInterval) {
+        clearInterval(flowAnimationInterval);
+        flowAnimationInterval = null;
+      }
+    }
+
+    function renderAnimationStep() {
+      animProgress = (animProgress + 0.02) % 1;
+
+      const pBook = document.getElementById('particle-book');
+      const pVid1 = document.getElementById('particle-video-1');
+      const pVid2 = document.getElementById('particle-video-2');
+      const pRx = document.getElementById('particle-rx');
+
+      if (activeMode === 'idle' || activeMode === 'book') {
+        pBook.style.display = 'block';
+        // travels from 240 (patient) to 760 (doctor) through 500 (server)
+        const x = 240 + animProgress * (760 - 240);
+        pBook.setAttribute('cx', x);
+        pBook.setAttribute('cy', 100);
+      } else {
+        pBook.style.display = 'none';
+      }
+
+      if (activeMode === 'idle' || activeMode === 'video') {
+        pVid1.style.display = 'block';
+        pVid2.style.display = 'block';
+        // Dual directional
+        const x1 = 240 + animProgress * (760 - 240);
+        const x2 = 760 - animProgress * (760 - 240);
+        pVid1.setAttribute('cx', x1);
+        pVid1.setAttribute('cy', 240);
+        pVid2.setAttribute('cx', x2);
+        pVid2.setAttribute('cy', 240);
+      } else {
+        pVid1.style.display = 'none';
+        pVid2.style.display = 'none';
+      }
+
+      if (activeMode === 'idle' || activeMode === 'rx') {
+        pRx.style.display = 'block';
+        // Travels from doctor (760) back to patient (240)
+        const x = 760 - animProgress * (760 - 240);
+        pRx.setAttribute('cx', x);
+        pRx.setAttribute('cy', 100);
+      } else {
+        pRx.style.display = 'none';
+      }
+    }
+
+    // Initialize slide deck
+    updateSlide();
+  </script>
+</body>
+</html>
